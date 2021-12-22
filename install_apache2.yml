@@ -1,0 +1,35 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository index 
+    tags: always
+    apt:
+      update_cache: yes
+    when: ansible_distribution in ["Debian", "Ubuntu"] 
+
+  - name: install apache2 and php  packages for Ubuntu
+    tags: apache, apache2, ubuntu
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php 
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: update repository index 
+    tags: update, centos
+    dnf:
+      update_cache: yes
+    when: ansible_distribution in ["CentOS"] 
+
+  - name: install httpd package
+    tags: centos, httpd
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "CentOS"
