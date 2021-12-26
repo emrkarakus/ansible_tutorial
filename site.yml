@@ -27,7 +27,6 @@
     apt:
       name:
         - apache2
-        - libapache2-php-mod
       state: latest
       update_cache: yes
     when: ansible_distribution in ["Debian", "Ubuntu"] 
@@ -41,6 +40,15 @@
       state: latest
       update_cache: yes
     when: ansible_distribution == "CentOS"
+
+  - name: copy default html file to 10.9.2.167
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
 
 - hosts: db_servers
   become: true
@@ -66,3 +74,4 @@
     package:   ## ITS NAME IS package BECAUSE samba is same name in centos or ubuntu :)
       name: samba
       state: latest
+
